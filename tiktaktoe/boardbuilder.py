@@ -1,3 +1,31 @@
+#--------------- Board builder for tiktaktoe ------------------
+# Var format:
+#  boarddata = [ [0, 0, 0], [0, 0, 0], [0, 0, 0] ]
+#  player = 1 or 2
+#  p1score = must be a integer
+#  p2score = must be a integer
+#  input = String the script catch a null or restart/exit
+#
+# Functions:
+#   Show_board( boarddata, player, p1score, p2score ):
+#     description: a function to show the current board player and the score of the player;
+#
+#   Get_boardGet_board( row, line, borddata ):
+#     description: return a number
+#     var format: 0 == not set; 1 == X; 2 == O; over 2 == / (means error)
+#
+#   Set_board( input, boarddata, player ):
+#     description: set the input on the board
+#     info: input should look like a1 or something like that (the script catches other formats)
+#
+#   Check_board( boarddata ):
+#     description: check for a tiktaktoe
+#     info: if there is a tiktaktoe it returns the boarddata with the marked tiktaktoe
+#           else it will be return false
+#--------------- Board builder for tiktaktoe ------------------
+
+from sys import platform
+
 # Translate Number into Character
 def translate( value ):
     if ( value == 0 ):
@@ -18,7 +46,7 @@ def Show_board( boarddata, player, p1score, p2score ):
     c = boarddata[2]
 
     # print board title and line
-    print(" +-< Board >--+--< \u001b[32mPlayer " + str(player) + "\u001b[0m >-+\n |   1  2  3  |               |")
+    print(" +-< Board >--+--< " + cc("32m") +"Player " + str(player) + "\u001b[0m >-+\n |   1  2  3  |               |")
 
     # print board status
     print(" | A " + translate(a[0]) + "  " + translate(a[1]) + "  " + translate(a[2]) + "  |   \u001b[33mP1: " + str(p1score) + "\u001b[0m       |")
@@ -40,10 +68,19 @@ def Get_board( row, line, borddata ):
         return borddata[2][line]
 
 # Set a mark on the board
-def Set_board( input, borddata, player ):
+def Set_board( input, boarddata, player ):
+
+    ############# COMMANDS AND INPUT CHECK ################################################################
+    # Check if input is False
+    if not input:  print("\u001b[31mplease enter something\u001b[0m"); borddata = False; return boarddata;
+
+    # restart board
+    if input == "restart": print("\u001b[31mboard restarted!\u001b[0m"); boarddata = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]; return boarddata;
 
     # exit board
-    if (input == "exit"): print("\u001b[31mexit tiktaktoe\u001b[0m"); return exit()
+    if input == "exit": print("\u001b[31mexit tiktaktoe\u001b[0m"); return exit()
+    ############# COMMANDS AND INPUT CHECK ################################################################
+
 
     # some vars for a better overview
     line = int( input[1] ) - 1
@@ -58,20 +95,20 @@ def Set_board( input, borddata, player ):
         print("\u001b[31mCan´t set this input! [Switched Player] \u001b[0m")
 
     # check if the spot is marked
-    elif ( Get_board(row, line, borddata) != 0 ):
+    elif ( Get_board(row, line, boarddata) != 0 ):
         print("\u001b[31mThis position is marked by another Player! [Switched Player] \u001b[0m")
 
     # let the player mark
     else:
         if (row == "a"):
-            borddata[0][line] = player
+            boarddata[0][line] = player
         elif (row == "b"):
-            borddata[1][line] = player
+            boarddata[1][line] = player
         elif (row == "c"):
-            borddata[2][line] = player
+            boarddata[2][line] = player
 
     # returning new board with the mark
-    return borddata
+    return boarddata
 
 # Checking if a player won
 def Check_board( boarddata ):
@@ -87,7 +124,7 @@ def Check_board( boarddata ):
         a[1] = 9
         a[2] = 9
         return boarddata
-    if b[0] + b[1] + b[2] != 0 and b[0] == b[1] == b[2]:
+    if b[0] + b[1] + b[2] != 0 and b[0] == b[1] ==[2]:
         b[0] = 9
         b[1] = 9
         b[2] = 9
@@ -125,3 +162,9 @@ def Check_board( boarddata ):
 
     # else:
     return False
+
+def cc( color ):
+    if platform == "darwin":
+        return "\u001b[" + color
+    elif platform == "win32" or platform == "win64":
+        return "^<ESC^>[" + color
