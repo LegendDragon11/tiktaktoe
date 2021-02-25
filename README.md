@@ -1,7 +1,8 @@
 # tiktaktoe
 This is running on python version 3.8
-
 info: just a little game ;D
+
+[![Discord](https://img.shields.io/discord/690934524955197471?label=Discord&logo=discord)](https://discord.gg/MFhh5XEM2b)
 
 ## Install
 ***Install on MacOs BigSur***
